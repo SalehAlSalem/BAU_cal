@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/calendar.ics", "destination": "/api/calendar" }
-  ]
+    { "source": "/calendar.ics", "destination": "/api/calendar" },
+    { "source": "/calendar-students.ics", "destination": "/api/calendar-students" },
+    { "source": "/calendar-full.ics", "destination": "/api/calendar-full" }
+  ],
+  "cleanUrls": true
 }

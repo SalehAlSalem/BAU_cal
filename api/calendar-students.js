@@ -1,6 +1,6 @@
 /**
- * Legacy calendar endpoint - provides full calendar with alerts
- * @module api/calendar
+ * Students calendar endpoint - filtered events relevant to students only
+ * @module api/calendar-students
  */
 const { fetchEvents, generateICS } = require("./lib/calendar-fetcher");
 
@@ -13,17 +13,18 @@ module.exports = async (req, res) => {
       return res.end("Missing SOURCE_URL environment variable");
     }
 
-    const events = await fetchEvents(SOURCE_URL);
+    const allEvents = await fetchEvents(SOURCE_URL);
+    const studentEvents = allEvents.filter(ev => ev.isStudentRelated);
 
     const icsContent = generateICS(
-      events,
-      "التقويم الجامعي - BAU",
+      studentEvents,
+      "تقويم الطلاب - BAU",
       true
     );
 
     res.setHeader("Content-Type", "text/calendar; charset=utf-8");
     res.setHeader("Cache-Control", "s-maxage=21600, stale-while-revalidate=86400");
-    res.setHeader("Content-Disposition", 'inline; filename="bau-calendar.ics"');
+    res.setHeader("Content-Disposition", 'inline; filename="bau-calendar-students.ics"');
     res.statusCode = 200;
     res.end(icsContent);
   } catch (err) {
